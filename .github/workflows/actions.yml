@@ -1,4 +1,4 @@
-name: Actions Workflow
+name: Checkout Action
 
 on:
   - push
@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+        with:
+          ref: master
       - name: List Files
         run: |
           pwd
@@ -17,10 +19,3 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_WORKSPACE
           echo "${{ github.token }}"
-      - name: Simple JS Action
-        id: greet
-        uses: actions/hello-world-javascript-action@v1.1
-        with:
-          who-to-greet: windbird123
-      - name: Log Greeting Time
-        run: echo "${{ steps.greet.outputs.time }}"
