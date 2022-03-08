@@ -1,0 +1,19 @@
+name: Container
+on:
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: use NodeJS
+        uses: actions/setup-node@v1 # python 도 지정 가능
+        with:
+          node-version: "12.x"
+      - run: npm ci
+      - run: npm test -- --coverage
+        env:
+          CI: true
