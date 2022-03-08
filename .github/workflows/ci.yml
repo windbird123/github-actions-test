@@ -29,7 +29,7 @@ jobs:
       - run: npm install -g surge
       - name: deploy to staging
         if: github.event.name == 'push'
-        run: nxp surge --project ./build --domain rainy-tank.surge.sh
+        run: nxp surge --project ./build --domain rainy-tank-stage.surge.sh
         env:
           # surge 를 한번 실행한적이 있다면
           # surge whoami 로 확인 가능
