@@ -1,6 +1,9 @@
-name: Container
+name: Feature to Dev PR
 on:
   pull_request:
+    branches:
+      - dev
+  push:
     branches:
       - dev
 
@@ -10,10 +13,27 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: use NodeJS
-        uses: actions/setup-node@v1 # python 도 지정 가능
+        uses: actions/setup-node@v1 # python 도 지정 가능 setup-python@v2
         with:
           node-version: "12.x"
       - run: npm ci
       - run: npm test -- --coverage
         env:
           CI: true
+
+      # dev 에 merge 되었을 때는 build 를 추가로 한다.
+      - name: build project
+        if: github.event.name == 'push'
+        run: npm run build
+
+      - run: npm install -g surge
+      - name: deploy to staging
+        if: github.event.name == 'push'
+        run: nxp surge --project ./build --domain rainy-tank.surge.sh
+        env:
+          # surge 를 한번 실행한적이 있다면
+          # surge whoami 로 확인 가능
+          SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+          # surge token 으로 생성 가능
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+
