@@ -18,7 +18,11 @@ jobs:
       - run: npm test -- --coverage
         env:
           CI: true
-
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v1
+        with:
+          name: code-coverage
+          path: coverage
       #########################################################
       # dev 에 merge 되었을 때는 build / deploy 를 추가로 한다.
       # merge 는 dev push event 로 처리된다.
