@@ -19,15 +19,20 @@ jobs:
         env:
           CI: true
 
-      # dev 에 merge 되었을 때는 build 를 추가로 한다.
+      #########################################################
+      # dev 에 merge 되었을 때는 build / deploy 를 추가로 한다.
+      # merge 는 dev push event 로 처리된다.
+      #########################################################
       - name: build project
         if: github.event_name == 'push'
         run: npm run build
 
       - run: npm install -g surge
+        if: github.event_name == 'push'
+
       - name: deploy to staging
         if: github.event_name == 'push'
-        run: nxp surge --project ./build --domain rainy-tank-stage.surge.sh
+        run: npx surge --project ./build --domain toothsome-wall.surge.sh # stage address
         env:
           # surge 를 한번 실행한적이 있다면
           # surge whoami 로 확인 가능
